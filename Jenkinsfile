@@ -6,7 +6,7 @@ node ('puppet-master'){
       
             checkout scm
       
-            sh 'echo jenkins | sudo -S cp -rf * /etc/puppet/modules/packages/ && echo jenkins | sudo -S chown -R root:root /etc/puppet/modules/packages'
+            sh 'echo jenkins | sudo -S cp -rf manifests /etc/puppet/modules/packages/ && echo jenkins | sudo -S chown -R root:root /etc/puppet/modules/packages'
       
             step([$class: 'WsCleanup'])
         
