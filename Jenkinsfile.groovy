@@ -2,7 +2,7 @@ node('puppet-master') {
     timestamps {
         step([$class: 'WsCleanup'])
         sh "ls -lart"
-        stage ('Git Checkout') { scm() }
+        stage ('SCM Checkout') { scm() }
         stage ('Syntax validation') { syntax() }
         stage ('Syntax Style check ') { style() }
         stage ('UnitTest & Acceptance Test') { unitTest() }
