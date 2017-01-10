@@ -6,7 +6,8 @@ node('puppet-master') {
         stage ('Syntax validation') { syntax() }
         stage ('Syntax Style check ') { style() }
         stage ('UnitTest & Acceptance Test') { unitTest() }
-        stage ( 'Update the manifest') { updatemanifest() }
+        stage ('Update the manifest') { updatemanifest() }
+        stage ('Deploy Catalog on servers') { deploycatalog () }
  //       stage ( 'Deploy 2 App-Server-II') { deployToNginxAppServer2() }
         step([$class: 'WsCleanup'])
     }
@@ -39,4 +40,27 @@ def unitTest() {
 def updatemanifest() {
 
     sh 'echo jenkins | sudo -S cp -rf manifests /etc/puppet/modules/packages/ && echo jenkins | sudo -S chown -R root:root /etc/puppet/modules/packages'
+    sh 'sleep 10'
 }
+
+def deploycatalog () {
+    
+    node('nginx-load-balancer') {
+        
+        sh 'echo jenkins | sudo -S puppet agent -t'
+        
+    }
+    node('app-server-1') {
+        
+        sh 'echo jenkins | sudo -S puppet agent -t'
+        
+    }
+    node('app-server-2') {
+        
+        sh 'echo jenkins | sudo -S puppet agent -t'
+        
+    }
+}    
+    
+    
+    
